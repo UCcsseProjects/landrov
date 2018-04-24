@@ -95,16 +95,12 @@ void loop() {
     } else {
         //Right motor speed set: 0-127, 63 stationary
         if (code > 63) {
-          Serial.print((char) code);
           pwm_value = (int) round(255*(code - 63)/64);
-          Serial.print((char) pwm_value);
           digitalWrite(RIGHT_RV_PIN, LOW);
           digitalWrite(RIGHT_FW_PIN, HIGH);
           analogWrite(RIGHT_PWM_PIN, pwm_value);
         } else if (code < 63) {
-          Serial.print((char) code);
           pwm_value = (int) round(255*(63 - code)/64);
-          Serial.print((char) pwm_value);
           digitalWrite(RIGHT_FW_PIN, LOW);
           digitalWrite(RIGHT_RV_PIN, HIGH);
           analogWrite(RIGHT_PWM_PIN, pwm_value);
