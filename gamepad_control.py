@@ -16,7 +16,7 @@ clock = pygame.time.Clock()
 
 port = "5556"
 context = zmq.Context()
-socket = context.socket(zmq.PAIR)
+socket = context.socket(zmq.SUB)
 socket.connect("tcp://192.168.8.106:%s" % port)
 print('connected to landrov server')
 
@@ -24,7 +24,6 @@ print('connected to landrov server')
 done = False
 cnt=0
 while not done:
-    # EVENT PROCESSING STEP
     cnt+=1
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -48,8 +47,9 @@ while not done:
         if cnt%10==0:
             print('axes_vals=',','.join(['{:4.3f}'.format(i) for i in axes_vals]))
        
-        cmd = ('go',(axes_vals[1],axes_vals[4]))
-        socket.send(pickle.dumps(cmd,0)) 
+        cmd = (axes_vals[1],axes_vals[4])
+        #socket.send(pickle.dumps(cmd,0)) 
+        socket.send_multipart([b'motor',pickle.dumps(cmd,0)]) 
         #socket.send_multipart([config.topic_mixing,pickle.dumps((port,starboard,vertical),-1)])
         #print('{:> 5} P {:> 5.3f} S {:> 5.3f} V {:> 5.3f}'.format(cnt,port,starboard,vertical),end='\r')
 

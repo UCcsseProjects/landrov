@@ -16,7 +16,7 @@ config = rs.config()
 sx=1280//2
 sy=720//2
 fps=30
-dest_sink='tcpserversink host=0.0.0.0 port=8888'
+#dest_sink='tcpserversink host=0.0.0.0 port=8888'
 config.enable_stream(rs.stream.depth, sx, sy, rs.format.z16, fps)
 config.enable_stream(rs.stream.color, sx, sy, rs.format.bgr8, fps)
 
@@ -39,7 +39,7 @@ cnt=0
 
 port = "5557"
 context = zmq.Context()
-socket = context.socket(zmq.PAIR)
+socket = context.socket(zmq.PUB)
 socket.bind("tcp://*:%s" % port)
 
 
@@ -76,7 +76,8 @@ try:
 
         encode_param=[int(cv2.IMWRITE_JPEG_QUALITY),80]
 
-        socket.send(cv2.imencode('.jpg',images, encode_param)[1].tostring())
+        #socket.send(cv2.imencode('.jpg',images, encode_param)[1].tostring())
+        socket.send_multipart([b'images',cv2.imencode('.jpg',images, encode_param)[1].tostring()])
         
 
 

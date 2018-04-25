@@ -8,8 +8,9 @@ ser = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
 
 port = "5556"
 context = zmq.Context()
-socket = context.socket(zmq.PAIR)
+socket = context.socket(zmq.SUB)
 socket.bind("tcp://*:%s" % port)
+socket.setsockopt(zmq.SUBSCRIBE,b'motor') 
 
 time.sleep(2)
 
@@ -20,9 +21,10 @@ while 1:
     while ser.in_waiting:
         print('driver out = ',ord(ser.read()))
 
-    if len(zmq.select([socket],[],[],0)[0])>0:
-        cmd,data = pickle.loads(socket.recv())
-        if cmd=='go':
+    if socket.poll(0.001): 
+        topic, msg = socket.recv_multipart() 
+        data = pickle.loads(msg)
+        if topic==b'motor':
             leftTrackVel,rightTrackVel=data
 
 
