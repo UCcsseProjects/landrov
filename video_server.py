@@ -78,8 +78,9 @@ try:
         encode_param=[int(cv2.IMWRITE_JPEG_QUALITY),80]
 
         #socket.send(cv2.imencode('.jpg',images, encode_param)[1].tostring())
+        #print('sending...')
         socket.send_multipart([b'rgbimage',cv2.imencode('.jpg',color_image, encode_param)[1].tostring()])
-        socket.send_multipart([b'depthimage',cv2.imencode('.jpg',depthimage, encode_param)[1].tostring()])
+        socket.send_multipart([b'depthimage',cv2.imencode('.jpg',depth_8bit, encode_param)[1].tostring()])
         
 
 

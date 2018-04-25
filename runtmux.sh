@@ -1,5 +1,5 @@
 #/bin/bash
-conda3
+export PATH="/home/upsquared/miniconda3/bin:$PATH"
 tmux kill-session -t landrov
 tmux new-session -d -s landrov
 

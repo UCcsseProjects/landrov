@@ -47,8 +47,8 @@ if __name__ == '__main__':
 
 		# Move tracks forward at full speed
 		serial_mutex.acquire()
-		leftTrackVel = 1
-		rightTrackVel = 0
+		leftTrackVel = 0
+		rightTrackVel = 1
 		serial_mutex.release()
 		time.sleep(2)
 

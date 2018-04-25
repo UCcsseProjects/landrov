@@ -5,6 +5,7 @@ import zmq,pickle
 
 
 ser = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
+time.sleep(4)
 
 port = "5556"
 context = zmq.Context()
@@ -12,7 +13,6 @@ socket = context.socket(zmq.SUB)
 socket.bind("tcp://*:%s" % port)
 socket.setsockopt(zmq.SUBSCRIBE,b'motor') 
 
-time.sleep(2)
 
 last_t_sent=0
 leftTrackVel = 0.
@@ -30,10 +30,12 @@ while 1:
 
     if time.time()-last_t_sent>0.1: #10hz
         left_value = int(round(191 + leftTrackVel*63))
-        ser.write(b'%c'%left_value)
         right_value = int(round(63 + rightTrackVel*63))
+        #print("sent: {:3} {:3}".format(left_value,right_value ),end='\r')
+        print("sent: {:3} {:3} {} {}".format(left_value,right_value,leftTrackVel, rightTrackVel ))
         ser.write(b'%c'%right_value)
-        print("sent: {:3} {:3}".format(left_value,right_value ),end='\r')
+        time.sleep(0.01)
+        ser.write(b'%c'%left_value)
         last_t_sent=time.time()
         
 
