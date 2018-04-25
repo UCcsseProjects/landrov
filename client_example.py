@@ -8,7 +8,8 @@ import numpy as np
 context = zmq.Context()
 sensor_socket = context.socket(zmq.SUB)
 sensor_socket.connect("tcp://192.168.8.106:5557")
-sensor_socket.setsockopt(zmq.SUBSCRIBE,b'images') 
+sensor_socket.setsockopt(zmq.SUBSCRIBE,b'depthimage') 
+sensor_socket.setsockopt(zmq.SUBSCRIBE,b'rgbimage') 
 
 control_socket = context.socket(zmq.PUB)
 control_socket.connect("tcp://192.168.8.106:5556")
@@ -26,9 +27,11 @@ while 1:
             break
         if sensor_socket.poll(0.001):
             topic,msg = sensor_socket.recv_multipart()
-            if topic == b'images':
+            if topic == b'rgbimage':
                 img = cv2.imdecode(np.fromstring(buf, dtype=np.uint8),cv2.IMREAD_COLOR)
                 cv2.imshow('img',img)
+            if topic == b'depthimage':
+                depth =  cv2.imdecode(np.fromstring(buf, dtype=np.uint8),cv2.IMREAD_GREYSCALE)  
     
     tdiff= time.time()-start_time 
 

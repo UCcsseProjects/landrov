@@ -69,15 +69,17 @@ try:
         color_image = np.asanyarray(color_frame.get_data())
 
         # Apply colormap on depth image (image must be converted to 8-bit per pixel first)
-        depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
+        #depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
+        depth_8bit = cv2.convertScaleAbs(depth_image, alpha=0.03)
 
         # Stack both images horizontally
-        images = np.hstack((color_image, depth_colormap))
+        #images = np.hstack((color_image, depth_colormap))
 
         encode_param=[int(cv2.IMWRITE_JPEG_QUALITY),80]
 
         #socket.send(cv2.imencode('.jpg',images, encode_param)[1].tostring())
-        socket.send_multipart([b'images',cv2.imencode('.jpg',images, encode_param)[1].tostring()])
+        socket.send_multipart([b'rgbimage',cv2.imencode('.jpg',color_image, encode_param)[1].tostring()])
+        socket.send_multipart([b'depthimage',cv2.imencode('.jpg',depthimage, encode_param)[1].tostring()])
         
 
 
