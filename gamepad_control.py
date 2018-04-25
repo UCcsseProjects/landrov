@@ -16,7 +16,7 @@ clock = pygame.time.Clock()
 
 port = "5556"
 context = zmq.Context()
-socket = context.socket(zmq.SUB)
+socket = context.socket(zmq.PUB)
 socket.connect("tcp://192.168.8.106:%s" % port)
 print('connected to landrov server')
 
