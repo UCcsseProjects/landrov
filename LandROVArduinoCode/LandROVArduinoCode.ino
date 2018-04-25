@@ -37,13 +37,11 @@ void setup() {
   pinMode(RIGHT_FRONT_ENC_PIN_A, INPUT);
   pinMode(RIGHT_FRONT_ENC_PIN_B, INPUT);
   pinMode(LEFT_PWM_PIN, OUTPUT);
-  digitalWrite(LEFT_PWM_PIN, LOW);
   pinMode(LEFT_FW_PIN, OUTPUT);
   digitalWrite(LEFT_FW_PIN, LOW);
   pinMode(LEFT_RV_PIN, OUTPUT);
   digitalWrite(LEFT_RV_PIN, LOW);
   pinMode(RIGHT_PWM_PIN, OUTPUT);
-  digitalWrite(RIGHT_PWM_PIN, LOW);
   pinMode(RIGHT_FW_PIN, OUTPUT);
   digitalWrite(RIGHT_FW_PIN, LOW);
   pinMode(RIGHT_RV_PIN, OUTPUT);
@@ -74,7 +72,7 @@ void loop() {
   if (Serial.available())
   {
     code = (double) Serial.read();
-    delay(40);
+    delay(20);
     if (code >= 128) {
       //Left motor speed set: 128-255, 191 stationary
       if (code > 191) {

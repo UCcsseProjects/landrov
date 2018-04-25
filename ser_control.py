@@ -19,7 +19,6 @@ def arduino_serial(ser):
 			print(driverReturnValue)
 		serial_mutex.acquire()
 		left_value = int(round(191 + leftTrackVel*63))
-		print("Left value sent:", left_value)
 		ser.write(chr(left_value))
 		time.sleep(0.1)
 		right_value = int(round(63 + rightTrackVel*63))
@@ -47,8 +46,8 @@ if __name__ == '__main__':
 
 		# Move tracks forward at full speed
 		serial_mutex.acquire()
-		leftTrackVel = 0
-		rightTrackVel = -0.5
+		leftTrackVel = 1
+		rightTrackVel = 1
 		serial_mutex.release()
 		time.sleep(2)
 
