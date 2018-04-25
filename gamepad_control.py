@@ -54,6 +54,6 @@ while not done:
         #print('{:> 5} P {:> 5.3f} S {:> 5.3f} V {:> 5.3f}'.format(cnt,port,starboard,vertical),end='\r')
 
     #pygame.time.wait(0)
-    clock.tick(30)
+    clock.tick(10)
 pygame.quit()
 
