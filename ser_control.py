@@ -19,8 +19,12 @@ def arduino_serial(ser):
 			print(driverReturnValue)
 		serial_mutex.acquire()
 		left_value = int(round(191 + leftTrackVel*63))
+<<<<<<< HEAD
+		ser.write(chr(left_value))
+=======
 		print("Left value sent:", left_value)
 		ser.write(b'%c'%left_value)
+>>>>>>> refs/remotes/origin/master
 		time.sleep(0.1)
 		right_value = int(round(63 + rightTrackVel*63))
 		ser.write(b'%c'%right_value)
