@@ -25,8 +25,8 @@ async def hello(websocket, path):
                     ,end='\r'))
             else:
                 iters,lf,la,rf,ra=map(eval,datastr.split())
-                lf=np.clip(lf,-2,2)/2
-                rf=np.clip(rf,-2,2)/2
+                lf=np.clip(lf,-2,2)/2*np.sign(np.sin(np.deg2rad(la)))
+                rf=np.clip(rf,-2,2)/2*np.sign(np.sin(np.deg2rad(ra)))
                 control_socket.send_multipart([b'motor_over',pickle.dumps((lf,rf))])
                 print('{:5} {:4.2f} {:4.2f} {:4.2f} {:4.2f}'.format(iters,lf,la,rf,ra),end='\r')
         except:
