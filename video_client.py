@@ -7,7 +7,7 @@ port = "5557"
 context = zmq.Context()
 socket = context.socket(zmq.SUB)
 socket.connect("tcp://192.168.8.106:%s" % port)
-socket.setsockopt(zmq.SUBSCRIBE,b'images') 
+socket.setsockopt(zmq.SUBSCRIBE,b'rgbimage') 
 print('connected to landrov server')
 
 
@@ -20,6 +20,6 @@ while 1:
             break
         if socket.poll(0.001):
             topic,msg = socket.recv_multipart()
-            if topic == b'images':
+            if topic == b'rgbimage':
                 img = cv2.imdecode(np.fromstring(buf, dtype=np.uint8),cv2.IMREAD_COLOR)
                 cv2.imshow('img',img)
