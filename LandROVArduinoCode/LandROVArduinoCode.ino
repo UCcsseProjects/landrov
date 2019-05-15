@@ -3,12 +3,12 @@
 
 #define DIST_PER_ENC_TICK 0.01
 
-#define LEFT_PWM_PIN 3
-#define LEFT_FW_PIN 4
-#define LEFT_RV_PIN 2
-#define RIGHT_PWM_PIN 5
-#define RIGHT_FW_PIN 7
-#define RIGHT_RV_PIN 6
+#define LEFT_PWM_PIN 5
+#define LEFT_FW_PIN 7
+#define LEFT_RV_PIN 6
+#define RIGHT_PWM_PIN 3
+#define RIGHT_FW_PIN 4
+#define RIGHT_RV_PIN 2
 
 const byte LEFT_REAR_ENC_PIN_A = A0;
 const byte LEFT_REAR_ENC_PIN_B = A1;
@@ -47,9 +47,6 @@ void setup() {
   pinMode(RIGHT_RV_PIN, OUTPUT);
   digitalWrite(RIGHT_RV_PIN, LOW);
 
-  analogWrite(LEFT_PWM_PIN, 0);
-  analogWrite(RIGHT_PWM_PIN, 0);
-
   cli();
   *digitalPinToPCMSK(LEFT_REAR_ENC_PIN_A) |= bit (digitalPinToPCMSKbit(LEFT_REAR_ENC_PIN_A));  // enable pin
   *digitalPinToPCMSK(RIGHT_REAR_ENC_PIN_A) |= bit (digitalPinToPCMSKbit(RIGHT_REAR_ENC_PIN_A));  // enable pin
@@ -57,9 +54,15 @@ void setup() {
   PCIFR  |= bit (digitalPinToPCICRbit(RIGHT_REAR_ENC_PIN_A)); // clear any outstanding interrupt
   //PCICR  |= bit (digitalPinToPCICRbit(LEFT_REAR_ENC_PIN_A)); // enable interrupt for the group
   //PCICR  |= bit (digitalPinToPCICRbit(RIGHT_REAR_ENC_PIN_A)); // enable interrupt for the group
-
   sei();
-  wdt_enable(WDTO_2S);
+  
+  TCCR0B = TCCR0B & B11111000 | B00000011; // Change pwm timer prescalar to increase frequency
+  TCCR2B = TCCR2B & B11111000 | B00000011; // Change pwm timer prescalar to increase frequency
+
+  analogWrite(LEFT_PWM_PIN, 0);
+  analogWrite(RIGHT_PWM_PIN, 0);
+  
+  //wdt_enable(WDTO_2S);
 
 }
 
@@ -67,14 +70,21 @@ void loop() {
   double code;
   int pwm_value;
   
-  wdt_reset();
+  //wdt_reset();
+  delay(50);
+  /*digitalWrite(LEFT_RV_PIN, LOW);
+  digitalWrite(LEFT_FW_PIN, HIGH);
+  analogWrite(LEFT_PWM_PIN, 50);
 
+  delay(300);
+  digitalWrite(RIGHT_RV_PIN, LOW);
+  digitalWrite(RIGHT_FW_PIN, HIGH);
+  analogWrite(RIGHT_PWM_PIN, 50);*/
+          
   if (Serial.available())
   {
     code = (double) Serial.read();
-    delay(20);
     if (code >= 128) {
-      //Left motor speed set: 128-255, 191 stationary
       if (code > 191) {
         pwm_value = (int) round(255*(code - 191)/64);
         digitalWrite(LEFT_RV_PIN, LOW);

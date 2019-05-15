@@ -15,7 +15,6 @@ print('connected to landrov server')
 
 while 1:
     k=cv2.waitKey(1)
-
     if k!=-1:
         if k  == 27 or k == ord('q'):
             break
